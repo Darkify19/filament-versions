@@ -1,0 +1,44 @@
+<?php
+
+// translations for ElvinQulizade/Versions
+return [
+
+    'tab' => [
+        'title' => 'Historial',
+    ],
+
+    'columns' => [
+        'when' => 'Fecha',
+        'event' => 'Evento',
+        'user' => 'Usuario',
+    ],
+
+    'events' => [
+        'created' => 'Creado',
+        'updated' => 'Actualizado',
+        'restored' => 'Restaurado',
+    ],
+
+    'user' => [
+        'system' => 'Sistema',
+    ],
+
+    'actions' => [
+        'view_diff' => 'Ver cambios',
+        'restore' => 'Restaurar',
+        'close' => 'Cerrar',
+    ],
+
+    'diff' => [
+        'heading' => 'Qué cambió',
+        'no_changes' => 'No hay cambios en esta versión.',
+        'empty_value' => '(vacío)',
+    ],
+
+    'restore' => [
+        'confirmation_heading' => '¿Restaurar esta versión?',
+        'confirmation_description' => 'Esto sobrescribirá el registro actual con los datos de esta versión.',
+        'success' => 'Versión restaurada.',
+    ],
+
+];

@@ -3,6 +3,7 @@
 namespace ElvinQulizade\Versions\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
@@ -26,5 +27,10 @@ class Version extends Model
     public function versionable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(config('auth.providers.users.model', 'App\\Models\\User'), 'user_id');
     }
 }

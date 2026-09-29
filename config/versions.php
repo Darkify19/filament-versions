@@ -16,4 +16,8 @@ return [
     // are pruned automatically after each save, and via `versions:prune`.
     'max_versions_per_model' => 50,
 
+    // Optional callable(Version $version): bool to gate the "Restore" action.
+    // Left null, restoring is allowed for anyone who can see the History tab.
+    'authorize_restore' => null,
+
 ];

@@ -4,12 +4,14 @@ namespace ElvinQulizade\Versions\Tests;
 
 use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
 use BladeUI\Icons\BladeIconsServiceProvider;
+use ElvinQulizade\Versions\Tests\Fixtures\PostResource;
 use ElvinQulizade\Versions\VersionsServiceProvider;
 use Filament\Actions\ActionsServiceProvider;
 use Filament\FilamentServiceProvider;
 use Filament\Forms\FormsServiceProvider;
 use Filament\Infolists\InfolistsServiceProvider;
 use Filament\Notifications\NotificationsServiceProvider;
+use Filament\Panel;
 use Filament\Schemas\SchemasServiceProvider;
 use Filament\Support\SupportServiceProvider;
 use Filament\Tables\TablesServiceProvider;
@@ -62,6 +64,16 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app): void
     {
         $app['config']->set('database.default', 'testing');
+        $app['config']->set('app.key', 'base64:' . base64_encode(str_repeat('x', 32)));
+    }
+
+    protected function panel(): Panel
+    {
+        return Panel::make()
+            ->id('admin')
+            ->path('admin')
+            ->default()
+            ->resources([PostResource::class]);
     }
 
     protected function defineDatabaseMigrations(): void

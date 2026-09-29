@@ -7,6 +7,11 @@ use ElvinQulizade\Versions\Support\VersionPruner;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
 
+/**
+ * Pair with `implements \ElvinQulizade\Versions\Contracts\Versionable` so the
+ * restore action (which only knows the polymorphic base Model) can call back
+ * into this trait's methods.
+ */
 trait HasVersions
 {
     protected ?string $versionEventOverride = null;
