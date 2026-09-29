@@ -44,7 +44,7 @@ trait HasVersions
     public function versionableAttributes(): array
     {
         $except = array_merge(
-            config('versions.excluded_attributes', []),
+            config('filament-versions.excluded_attributes', []),
             $this->versionExcept ?? []
         );
 

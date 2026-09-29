@@ -2,8 +2,13 @@
 
 use ElvinQulizade\Versions\Tests\Fixtures\Post;
 
+it('merges the package config file under the filament-versions key', function () {
+    expect(config('filament-versions.max_versions_per_model'))->toBe(50)
+        ->and(config('filament-versions.excluded_attributes'))->toContain('password');
+});
+
 it('keeps only the configured number of versions per model', function () {
-    config()->set('versions.max_versions_per_model', 3);
+    config()->set('filament-versions.max_versions_per_model', 3);
 
     $post = Post::create(['title' => 'v1']);
     $post->update(['title' => 'v2']);
@@ -16,7 +21,7 @@ it('keeps only the configured number of versions per model', function () {
 });
 
 it('prunes globally via the artisan command', function () {
-    config()->set('versions.max_versions_per_model', 50);
+    config()->set('filament-versions.max_versions_per_model', 50);
 
     $post = Post::create(['title' => 'v1']);
     $post->update(['title' => 'v2']);

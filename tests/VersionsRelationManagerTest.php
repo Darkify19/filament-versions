@@ -37,7 +37,7 @@ it('restores a version through the restore action', function () {
 });
 
 it('hides the restore action when authorization denies it', function () {
-    config()->set('versions.authorize_restore', fn () => false);
+    config()->set('filament-versions.authorize_restore', fn () => false);
 
     $post = Post::create(['title' => 'Hello']);
 

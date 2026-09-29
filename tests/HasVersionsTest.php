@@ -34,7 +34,7 @@ it('restores a model to a previous version and records a restored version', func
 });
 
 it('excludes configured attributes from the snapshot', function () {
-    config()->set('versions.excluded_attributes', ['body']);
+    config()->set('filament-versions.excluded_attributes', ['body']);
 
     $post = Post::create(['title' => 'Hello', 'body' => 'World']);
 

@@ -11,7 +11,7 @@ class VersionPruner
      */
     public static function prune(string $versionableType, int | string $versionableId, ?int $keep = null): int
     {
-        $keep ??= (int) config('versions.max_versions_per_model', 50);
+        $keep ??= (int) config('filament-versions.max_versions_per_model', 50);
 
         $ids = Version::query()
             ->where('versionable_type', $versionableType)

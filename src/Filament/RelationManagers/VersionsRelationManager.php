@@ -127,7 +127,7 @@ class VersionsRelationManager extends RelationManager
 
     protected static function canRestoreVersion(Version $record): bool
     {
-        $callback = config('versions.authorize_restore');
+        $callback = config('filament-versions.authorize_restore');
 
         return $callback === null || (bool) call_user_func($callback, $record);
     }
