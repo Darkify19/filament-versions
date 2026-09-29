@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace ElvinQulizade\Versions\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class VersionsCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'filament-versions';
 
     public $description = 'My command';
 
