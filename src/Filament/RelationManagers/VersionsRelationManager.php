@@ -29,6 +29,10 @@ class VersionsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('event')
             ->defaultSort('id', 'desc')
+            // The owner record is saved by a sibling Livewire component (the
+            // Edit page's form), which cannot notify this table directly, so
+            // poll instead of going stale until the next full page load.
+            ->poll('10s')
             ->columns([
                 TextColumn::make('created_at')
                     ->label(__('filament-versions::versions.columns.when'))
@@ -66,6 +70,18 @@ class VersionsRelationManager extends RelationManager
                     ->modalHeading(__('filament-versions::versions.restore.confirmation_heading'))
                     ->modalDescription(__('filament-versions::versions.restore.confirmation_description'))
                     ->visible(fn (Version $record): bool => static::canRestoreVersion($record))
+                    // The owner record's edit form lives in a sibling Livewire
+                    // component that has no way to learn the record changed
+                    // here, so its fields would go stale — a save right after
+                    // restoring would silently overwrite the restore with
+                    // those stale values. Reload the page instead of trying
+                    // to sync two independent components.
+                    //
+                    // url()->current() would resolve to this Livewire AJAX
+                    // request's own endpoint (/livewire/update), not the page
+                    // the browser is showing, so the actual page URL has to
+                    // come from the Referer header instead.
+                    ->successRedirectUrl(fn (): ?string => request()->header('referer'))
                     ->action(function (Version $record): void {
                         $versionable = $record->versionable;
 
