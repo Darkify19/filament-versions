@@ -27,6 +27,8 @@ return [
         'view_diff' => 'Farkı görüntüle',
         'restore' => 'Geri yükle',
         'close' => 'Kapat',
+        'compare' => 'Karşılaştır',
+        'manage_excluded_fields' => 'Hariç tutulan alanlar',
     ],
 
     'diff' => [
@@ -39,6 +41,12 @@ return [
         'confirmation_heading' => 'Bu sürüm geri yüklensin mi?',
         'confirmation_description' => 'Bu işlem mevcut kaydı bu sürümün verileriyle değiştirecek.',
         'success' => 'Sürüm geri yüklendi.',
+    ],
+
+    'excluded_fields' => [
+        'heading' => 'Hariç tutulan alanlar',
+        'description' => 'Burada işaretlenen alanlar bu kaynak için sürüm anlık görüntüsünde asla saklanmaz.',
+        'success' => 'Hariç tutulan alanlar güncellendi.',
     ],
 
 ];

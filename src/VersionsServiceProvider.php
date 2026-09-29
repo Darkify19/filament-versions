@@ -10,6 +10,7 @@ use Filament\Support\Assets\Css;
 use Filament\Support\Assets\Js;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Filesystem\Filesystem;
 use Livewire\Features\SupportTesting\Testable;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
@@ -87,6 +88,15 @@ class VersionsServiceProvider extends PackageServiceProvider
 
         // Testing
         Testable::mixin(new TestsVersions);
+
+        // Scheduling
+        if ($this->app->runningInConsole() && config('filament-versions.schedule.enabled')) {
+            $this->app->booted(function (): void {
+                $this->app->make(Schedule::class)
+                    ->command(VersionsCommand::class)
+                    ->cron((string) config('filament-versions.schedule.cron', '0 3 * * *'));
+            });
+        }
     }
 
     protected function getAssetPackageName(): ?string
@@ -147,6 +157,7 @@ class VersionsServiceProvider extends PackageServiceProvider
     {
         return [
             'create_versions_table',
+            'create_version_settings_table',
         ];
     }
 }

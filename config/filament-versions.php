@@ -20,4 +20,12 @@ return [
     // Left null, restoring is allowed for anyone who can see the History tab.
     'authorize_restore' => null,
 
+    // Global retroactive cleanup, on top of the automatic per-save pruning
+    // above. Off by default since per-save pruning already keeps storage
+    // bounded for new versions.
+    'schedule' => [
+        'enabled' => false,
+        'cron' => '0 3 * * *',
+    ],
+
 ];

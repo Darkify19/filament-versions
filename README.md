@@ -65,6 +65,14 @@ return [
     // Optional callable(Version $version): bool to gate the "Restore" action.
     // Left null, restoring is allowed for anyone who can see the History tab.
     'authorize_restore' => null,
+
+    // Global retroactive cleanup, on top of the automatic per-save pruning
+    // above. Off by default since per-save pruning already keeps storage
+    // bounded for new versions.
+    'schedule' => [
+        'enabled' => false,
+        'cron' => '0 3 * * *',
+    ],
 ];
 ```
 
@@ -95,7 +103,11 @@ public static function getRelations(): array
 }
 ```
 
-That's it — every create/update is snapshotted automatically, the Edit page gets a "History" tab with a timeline, a field-level diff per version, and a one-click "Restore" action. To exclude fields from just one model, define `protected array $versionExcept = [...]` on it.
+That's it — every create/update is snapshotted automatically, the Edit page gets a "History" tab with a timeline, a field-level diff per version, and a one-click "Restore" action. To exclude fields from just one model in code, define `protected array $versionExcept = [...]` on it — or use the "Excluded fields" button on the History tab to manage it from the panel instead, per model class.
+
+Select any two rows in the History table and use the "Compare" bulk action to diff them directly against each other, instead of only against the previous version.
+
+Soft-deleted owner records keep working: their history and restore action remain reachable even while trashed.
 
 Old versions beyond `max_versions_per_model` are pruned automatically after each save. To prune retroactively (e.g. after lowering the limit), run:
 
@@ -103,6 +115,8 @@ Old versions beyond `max_versions_per_model` are pruned automatically after each
 php artisan versions:prune
 php artisan versions:prune --model="App\Models\Post" --keep=20
 ```
+
+To run that automatically instead, set `schedule.enabled` to `true` in the config file (and `schedule.cron` if you want something other than daily at 3am).
 
 ## Testing
 

@@ -27,6 +27,8 @@ return [
         'view_diff' => 'Ver cambios',
         'restore' => 'Restaurar',
         'close' => 'Cerrar',
+        'compare' => 'Comparar',
+        'manage_excluded_fields' => 'Campos excluidos',
     ],
 
     'diff' => [
@@ -39,6 +41,12 @@ return [
         'confirmation_heading' => '¿Restaurar esta versión?',
         'confirmation_description' => 'Esto sobrescribirá el registro actual con los datos de esta versión.',
         'success' => 'Versión restaurada.',
+    ],
+
+    'excluded_fields' => [
+        'heading' => 'Campos excluidos',
+        'description' => 'Los campos marcados aquí nunca se guardan en una instantánea de versión para este recurso.',
+        'success' => 'Campos excluidos actualizados.',
     ],
 
 ];

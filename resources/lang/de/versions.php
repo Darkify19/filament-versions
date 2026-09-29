@@ -27,6 +27,8 @@ return [
         'view_diff' => 'Änderungen anzeigen',
         'restore' => 'Wiederherstellen',
         'close' => 'Schließen',
+        'compare' => 'Vergleichen',
+        'manage_excluded_fields' => 'Ausgeschlossene Felder',
     ],
 
     'diff' => [
@@ -39,6 +41,12 @@ return [
         'confirmation_heading' => 'Diese Version wiederherstellen?',
         'confirmation_description' => 'Dadurch wird der aktuelle Datensatz durch die Daten dieser Version ersetzt.',
         'success' => 'Version wiederhergestellt.',
+    ],
+
+    'excluded_fields' => [
+        'heading' => 'Ausgeschlossene Felder',
+        'description' => 'Hier markierte Felder werden für diese Ressource nie in einem Versions-Snapshot gespeichert.',
+        'success' => 'Ausgeschlossene Felder aktualisiert.',
     ],
 
 ];

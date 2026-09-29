@@ -26,7 +26,10 @@ class Version extends Model
 
     public function versionable(): MorphTo
     {
-        return $this->morphTo();
+        // withTrashed() is a no-op for related models that don't use
+        // SoftDeletes, so this is safe to call unconditionally — otherwise a
+        // soft-deleted owner's history/restore would silently 404.
+        return $this->morphTo()->withTrashed();
     }
 
     public function user(): BelongsTo

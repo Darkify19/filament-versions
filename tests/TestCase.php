@@ -65,6 +65,8 @@ class TestCase extends Orchestra
     {
         $app['config']->set('database.default', 'testing');
         $app['config']->set('app.key', 'base64:' . base64_encode(str_repeat('x', 32)));
+        $app['config']->set('filament-versions.schedule.enabled', true);
+        $app['config']->set('filament-versions.schedule.cron', '30 4 * * *');
     }
 
     protected function panel(): Panel
@@ -82,13 +84,18 @@ class TestCase extends Orchestra
 
         $tempMigrationsDir = sys_get_temp_dir() . '/filament-versions-test-migrations';
 
-        if (! is_file($tempMigrationsDir . '/create_versions_table.php')) {
-            if (! is_dir($tempMigrationsDir)) {
-                mkdir($tempMigrationsDir, 0777, true);
-            }
+        if (! is_dir($tempMigrationsDir)) {
+            mkdir($tempMigrationsDir, 0777, true);
+        }
 
-            foreach (glob(__DIR__ . '/../database/migrations/*.php.stub') ?: [] as $stub) {
-                copy($stub, $tempMigrationsDir . '/' . basename($stub, '.stub'));
+        // Copy each stub individually (rather than gating the whole loop on
+        // one file's existence) so a newly added migration stub is picked up
+        // without stale copies from a previous run hiding it.
+        foreach (glob(__DIR__ . '/../database/migrations/*.php.stub') ?: [] as $stub) {
+            $target = $tempMigrationsDir . '/' . basename($stub, '.stub');
+
+            if (! is_file($target)) {
+                copy($stub, $target);
             }
         }
 

@@ -27,6 +27,8 @@ return [
         'view_diff' => 'Fərqə bax',
         'restore' => 'Bərpa et',
         'close' => 'Bağla',
+        'compare' => 'Müqayisə et',
+        'manage_excluded_fields' => 'İstisna sahələr',
     ],
 
     'diff' => [
@@ -39,6 +41,12 @@ return [
         'confirmation_heading' => 'Bu versiya bərpa edilsin?',
         'confirmation_description' => 'Bu, cari qeydi bu versiyanın datası ilə əvəz edəcək.',
         'success' => 'Versiya bərpa edildi.',
+    ],
+
+    'excluded_fields' => [
+        'heading' => 'İstisna sahələr',
+        'description' => 'Burada işarələnmiş sahələr bu resurs üçün versiya snapshot-unda heç vaxt saxlanılmır.',
+        'success' => 'İstisna sahələr yeniləndi.',
     ],
 
 ];

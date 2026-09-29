@@ -5,13 +5,18 @@ namespace ElvinQulizade\Versions\Filament\RelationManagers;
 use ElvinQulizade\Versions\Contracts\Versionable;
 use ElvinQulizade\Versions\Models\Version;
 use ElvinQulizade\Versions\Support\VersionDiffer;
+use ElvinQulizade\Versions\Support\VersionSettings;
 use Filament\Actions\Action;
+use Filament\Actions\BulkAction;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 class VersionsRelationManager extends RelationManager
 {
@@ -33,6 +38,36 @@ class VersionsRelationManager extends RelationManager
             // Edit page's form), which cannot notify this table directly, so
             // poll instead of going stale until the next full page load.
             ->poll('10s')
+            ->headerActions([
+                Action::make('manageExcludedFields')
+                    ->label(__('filament-versions::versions.actions.manage_excluded_fields'))
+                    ->icon('heroicon-o-eye-slash')
+                    ->modalHeading(__('filament-versions::versions.excluded_fields.heading'))
+                    ->modalDescription(__('filament-versions::versions.excluded_fields.description'))
+                    ->fillForm(fn (): array => [
+                        'excluded_fields' => VersionSettings::excludedFieldsFor($this->getOwnerRecord()->getMorphClass()),
+                    ])
+                    ->schema([
+                        CheckboxList::make('excluded_fields')
+                            ->hiddenLabel()
+                            ->options(fn (): array => array_combine(
+                                $columns = Schema::getColumnListing($this->getOwnerRecord()->getTable()),
+                                $columns,
+                            ))
+                            ->columns(2),
+                    ])
+                    ->action(function (array $data): void {
+                        VersionSettings::setExcludedFieldsFor(
+                            $this->getOwnerRecord()->getMorphClass(),
+                            $data['excluded_fields'] ?? [],
+                        );
+
+                        Notification::make()
+                            ->title(__('filament-versions::versions.excluded_fields.success'))
+                            ->success()
+                            ->send();
+                    }),
+            ])
             ->columns([
                 TextColumn::make('created_at')
                     ->label(__('filament-versions::versions.columns.when'))
@@ -94,6 +129,34 @@ class VersionsRelationManager extends RelationManager
                             ->success()
                             ->send();
                     }),
+            ])
+            ->toolbarActions([
+                BulkAction::make('compare')
+                    ->label(__('filament-versions::versions.actions.compare'))
+                    ->icon('heroicon-o-arrows-right-left')
+                    ->modalHeading(__('filament-versions::versions.diff.heading'))
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel(__('filament-versions::versions.actions.close'))
+                    ->deselectRecordsAfterCompletion()
+                    ->visible(fn (Collection $records): bool => $records->count() === 2)
+                    // Filament evaluates an action's schema when building the
+                    // component even if visible() will end up hiding it (e.g.
+                    // only one row currently selected), so this must not
+                    // assume exactly two records made it here.
+                    ->schema(function (Collection $records): array {
+                        if ($records->count() !== 2) {
+                            return [
+                                TextEntry::make('needs_two')
+                                    ->hiddenLabel()
+                                    ->state(__('filament-versions::versions.diff.no_changes')),
+                            ];
+                        }
+
+                        /** @var array<int, Version> $sorted */
+                        $sorted = $records->sortBy('id')->values()->all();
+
+                        return static::diffEntries($sorted[0]->data, $sorted[1]->data);
+                    }),
             ]);
     }
 
@@ -109,7 +172,17 @@ class VersionsRelationManager extends RelationManager
             ->orderByDesc('id')
             ->first();
 
-        $diff = VersionDiffer::diff($previous === null ? [] : $previous->data, $record->data);
+        return static::diffEntries($previous === null ? [] : $previous->data, $record->data);
+    }
+
+    /**
+     * @param  array<string, mixed>  $before
+     * @param  array<string, mixed>  $after
+     * @return array<TextEntry>
+     */
+    protected static function diffEntries(array $before, array $after): array
+    {
+        $diff = VersionDiffer::diff($before, $after);
 
         if ($diff === []) {
             return [

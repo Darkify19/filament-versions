@@ -4,6 +4,7 @@ namespace ElvinQulizade\Versions\Concerns;
 
 use ElvinQulizade\Versions\Models\Version;
 use ElvinQulizade\Versions\Support\VersionPruner;
+use ElvinQulizade\Versions\Support\VersionSettings;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Arr;
 
@@ -45,7 +46,8 @@ trait HasVersions
     {
         $except = array_merge(
             config('filament-versions.excluded_attributes', []),
-            $this->versionExcept ?? []
+            $this->versionExcept ?? [],
+            VersionSettings::excludedFieldsFor($this->getMorphClass()),
         );
 
         return Arr::except($this->getAttributes(), $except);
