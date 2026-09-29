@@ -47,7 +47,11 @@ it('hides the restore action when authorization denies it', function () {
     ])->assertTableActionHidden('restore', $post->latestVersion());
 });
 
-it('only offers to compare when exactly two versions are selected', function () {
+it('keeps the compare action visible at every selection count', function () {
+    // Filament only renders row-selection checkboxes once some bulk action
+    // reports itself visible for the current (possibly empty) selection —
+    // so this action must stay visible even at zero selected, or the
+    // checkboxes needed to ever select two rows would never appear.
     $post = Post::create(['title' => 'v1']);
     $post->update(['title' => 'v2']);
     $post->update(['title' => 'v3']);
@@ -58,10 +62,26 @@ it('only offers to compare when exactly two versions are selected', function () 
         'ownerRecord' => $post,
         'pageClass' => EditPost::class,
     ])
+        ->assertTableBulkActionVisible('compare')
         ->selectTableRecords([$versions[0]])
-        ->assertTableBulkActionHidden('compare')
+        ->assertTableBulkActionVisible('compare')
         ->selectTableRecords([$versions[0], $versions[1]])
         ->assertTableBulkActionVisible('compare');
+});
+
+it('opens the compare modal for exactly two selected versions', function () {
+    $post = Post::create(['title' => 'v1']);
+    $post->update(['title' => 'v2']);
+    $post->update(['title' => 'v3']);
+
+    $versions = $post->versions()->pluck('id');
+
+    Livewire::test(VersionsRelationManager::class, [
+        'ownerRecord' => $post,
+        'pageClass' => EditPost::class,
+    ])
+        ->callTableBulkAction('compare', [$versions[0], $versions[2]])
+        ->assertSuccessful();
 });
 
 it('excludes a field from future snapshots once managed in the panel', function () {

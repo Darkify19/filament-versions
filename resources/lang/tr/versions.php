@@ -35,6 +35,7 @@ return [
         'heading' => 'Neler değişti',
         'no_changes' => 'Bu sürümde değişiklik yok.',
         'empty_value' => '(boş)',
+        'select_two' => 'Karşılaştırmak için tam olarak iki sürüm seçin.',
     ],
 
     'restore' => [

@@ -138,17 +138,19 @@ class VersionsRelationManager extends RelationManager
                     ->modalSubmitAction(false)
                     ->modalCancelActionLabel(__('filament-versions::versions.actions.close'))
                     ->deselectRecordsAfterCompletion()
-                    ->visible(fn (Collection $records): bool => $records->count() === 2)
-                    // Filament evaluates an action's schema when building the
-                    // component even if visible() will end up hiding it (e.g.
-                    // only one row currently selected), so this must not
-                    // assume exactly two records made it here.
+                    // Filament only renders row-selection checkboxes at all
+                    // once some bulk action reports itself visible for the
+                    // current (possibly empty) selection. Gating visibility
+                    // on count() === 2 made that never true at zero selected,
+                    // so the checkboxes — and thus this action — could never
+                    // be reached. Stay visible always; guard the count in the
+                    // schema instead.
                     ->schema(function (Collection $records): array {
                         if ($records->count() !== 2) {
                             return [
                                 TextEntry::make('needs_two')
                                     ->hiddenLabel()
-                                    ->state(__('filament-versions::versions.diff.no_changes')),
+                                    ->state(__('filament-versions::versions.diff.select_two')),
                             ];
                         }
 

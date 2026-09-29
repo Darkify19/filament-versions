@@ -35,6 +35,7 @@ return [
         'heading' => 'Nə dəyişdi',
         'no_changes' => 'Bu versiyada dəyişiklik yoxdur.',
         'empty_value' => '(boş)',
+        'select_two' => 'Müqayisə üçün düz iki versiya seç.',
     ],
 
     'restore' => [

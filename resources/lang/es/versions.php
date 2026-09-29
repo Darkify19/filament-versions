@@ -35,6 +35,7 @@ return [
         'heading' => 'Qué cambió',
         'no_changes' => 'No hay cambios en esta versión.',
         'empty_value' => '(vacío)',
+        'select_two' => 'Selecciona exactamente dos versiones para comparar.',
     ],
 
     'restore' => [
