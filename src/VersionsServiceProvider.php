@@ -2,6 +2,8 @@
 
 namespace ElvinQulizade\Versions;
 
+use ElvinQulizade\Versions\Commands\VersionsCommand;
+use ElvinQulizade\Versions\Testing\TestsVersions;
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Asset;
 use Filament\Support\Assets\Css;
@@ -13,8 +15,6 @@ use Livewire\Features\SupportTesting\Testable;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use ElvinQulizade\Versions\Commands\VersionsCommand;
-use ElvinQulizade\Versions\Testing\TestsVersions;
 
 class VersionsServiceProvider extends PackageServiceProvider
 {

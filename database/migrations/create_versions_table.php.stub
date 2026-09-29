@@ -8,12 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('filament_versions_table', function (Blueprint $table) {
+        Schema::create('filament_versions', function (Blueprint $table) {
             $table->id();
-
-            // add fields
-
+            $table->morphs('versionable');
+            $table->string('event');
+            $table->json('data');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->timestamps();
+
+            $table->index(['versionable_type', 'versionable_id', 'id']);
         });
     }
 };

@@ -4,6 +4,7 @@ namespace ElvinQulizade\Versions\Tests;
 
 use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
 use BladeUI\Icons\BladeIconsServiceProvider;
+use ElvinQulizade\Versions\VersionsServiceProvider;
 use Filament\Actions\ActionsServiceProvider;
 use Filament\FilamentServiceProvider;
 use Filament\Forms\FormsServiceProvider;
@@ -19,7 +20,6 @@ use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
-use ElvinQulizade\Versions\VersionsServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -66,6 +66,20 @@ class TestCase extends Orchestra
 
     protected function defineDatabaseMigrations(): void
     {
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/Fixtures/migrations');
+
+        $tempMigrationsDir = sys_get_temp_dir() . '/filament-versions-test-migrations';
+
+        if (! is_file($tempMigrationsDir . '/create_versions_table.php')) {
+            if (! is_dir($tempMigrationsDir)) {
+                mkdir($tempMigrationsDir, 0777, true);
+            }
+
+            foreach (glob(__DIR__ . '/../database/migrations/*.php.stub') ?: [] as $stub) {
+                copy($stub, $tempMigrationsDir . '/' . basename($stub, '.stub'));
+            }
+        }
+
+        $this->loadMigrationsFrom($tempMigrationsDir);
     }
 }
