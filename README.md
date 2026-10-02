@@ -1,8 +1,8 @@
 # Snapshot-based version history and restore for Filament resources
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/elvin-qulizade/filament-versions.svg?style=flat-square)](https://packagist.org/packages/elvin-qulizade/filament-versions)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/elvin-qulizade/filament-versions/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/elvin-qulizade/filament-versions/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/elvin-qulizade/filament-versions/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/elvin-qulizade/filament-versions/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/elvin-qulizade/filament-versions/tests.yml?branch=5.x&label=tests&style=flat-square)](https://github.com/elvin-qulizade/filament-versions/actions?query=workflow%3Atests+branch%3A5.x)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/elvin-qulizade/filament-versions/fix-code-style.yml?branch=5.x&label=code%20style&style=flat-square)](https://github.com/elvin-qulizade/filament-versions/actions?query=workflow%3Afix-code-style+branch%3A5.x)
 [![Total Downloads](https://img.shields.io/packagist/dt/elvin-qulizade/filament-versions.svg?style=flat-square)](https://packagist.org/packages/elvin-qulizade/filament-versions)
 
 
