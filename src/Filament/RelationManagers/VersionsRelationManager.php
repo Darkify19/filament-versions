@@ -117,17 +117,17 @@ class VersionsRelationManager extends RelationManager
                     // the browser is showing, so the actual page URL has to
                     // come from the Referer header instead.
                     ->successRedirectUrl(fn (): ?string => request()->header('referer'))
-                    ->action(function (Version $record): void {
+                    ->successNotificationTitle(__('filament-versions::versions.restore.success'))
+                    // Filament 3 only notifies and redirects when a custom
+                    // action calls success() itself.
+                    ->action(function (Version $record, Action $action): void {
                         $versionable = $record->versionable;
 
                         if ($versionable instanceof Versionable) {
                             $versionable->restoreVersion($record);
                         }
 
-                        Notification::make()
-                            ->title(__('filament-versions::versions.restore.success'))
-                            ->success()
-                            ->send();
+                        $action->success();
                     }),
             ])
             ->bulkActions([
